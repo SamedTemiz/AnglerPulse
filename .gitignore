@@ -52,3 +52,6 @@ app.*.map.json
 
 # Claude Code yerel ayarları
 .claude/settings.local.json
+
+# Strateji iceren dosyalar - repoda tutulmaz (yerelde durur)
+/README.md
