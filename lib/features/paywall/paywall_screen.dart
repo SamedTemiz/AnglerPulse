@@ -182,6 +182,7 @@ class _ComparisonTable extends StatelessWidget {
     ('Today + tomorrow forecast', true, true),
     ('Full 14-day forecast', false, true),
     ('Saved locations', false, true), // free: 1 — hücrede yazıyla gösterilir
+    ('Compare saved fishing spots', false, true),
     ('Solunar period reminders', false, true),
     ('Ad-free experience', false, true),
   ];

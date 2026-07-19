@@ -12,6 +12,7 @@ import '../shared/location_switcher_sheet.dart';
 import '../shared/upgrade_sheet.dart';
 import '../shared/widgets/fish_rating.dart';
 import '../shared/widgets/reveal.dart';
+import '../spot_compare/spot_compare_screen.dart';
 import '../today/today_providers.dart';
 import '../weather/weather_providers.dart';
 
@@ -74,6 +75,30 @@ class LocationsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
+          Reveal(
+            delay: const Duration(milliseconds: 70),
+            child: _SpotCompareCta(
+              isPro: isPro,
+              locationCount: state.locations.length,
+              onTap: () {
+                if (!isPro) {
+                  showUpgradeTeaser(
+                    context,
+                    ref,
+                    feature: context.l10n(
+                      'Spot Compare',
+                      'Nokta Karşılaştırma',
+                    ),
+                  );
+                  return;
+                }
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const SpotCompareScreen()),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 12),
           for (var i = 0; i < state.locations.length; i++)
             Reveal(
               delay: Duration(milliseconds: 100 + i * 60),
@@ -102,6 +127,82 @@ class LocationsScreen extends ConsumerWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _SpotCompareCta extends StatelessWidget {
+  const _SpotCompareCta({
+    required this.isPro,
+    required this.locationCount,
+    required this.onTap,
+  });
+
+  final bool isPro;
+  final int locationCount;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final moss = SoluPalette.of(context).neonMoss;
+    return Material(
+      color: isPro ? moss.withValues(alpha: 0.11) : scheme.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            children: [
+              Icon(
+                Icons.compare_arrows_rounded,
+                color: isPro ? moss : scheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n(
+                        'Compare saved spots',
+                        'Kayıtlı noktaları karşılaştır',
+                      ),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      isPro
+                          ? locationCount < 2
+                                ? context.l10n(
+                                    'Add one more spot to start comparing.',
+                                    'Karşılaştırmaya başlamak için bir nokta daha ekleyin.',
+                                  )
+                                : context.l10n(
+                                    'Rank every saved spot for one day and see why.',
+                                    'Bir gün için tüm noktaları sıralayın ve nedenini görün.',
+                                  )
+                          : context.l10n(
+                              'Pro: choose the better spot before you leave.',
+                              'Pro: yola çıkmadan önce daha iyi noktayı seçin.',
+                            ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (!isPro)
+                Icon(Icons.lock_outline, color: scheme.onSurfaceVariant)
+              else
+                Icon(Icons.arrow_forward, color: moss),
+            ],
+          ),
+        ),
       ),
     );
   }

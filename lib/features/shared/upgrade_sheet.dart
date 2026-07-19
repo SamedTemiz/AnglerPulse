@@ -36,8 +36,8 @@ void showUpgradeTeaser(
             ),
             const SizedBox(height: 8),
             Text(
-              'Unlock unlimited locations, 14-day forecasts, period reminders '
-              'and an ad-free experience with AnglerPulse Pro.',
+              'Unlock unlimited locations, 14-day forecasts, Spot Compare, '
+              'period reminders and an ad-free experience with AnglerPulse Pro.',
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
